@@ -1,0 +1,74 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema portfolioWeb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema portfolioWeb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `portfolioWeb` DEFAULT CHARACTER SET utf8 ;
+USE `portfolioWeb` ;
+
+-- -----------------------------------------------------
+-- Table `portfolioWeb`.`persona`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `portfolioWeb`.`persona` (
+  `idpersona` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `apellido` VARCHAR(45) NULL,
+  `domicilio` VARCHAR(45) NULL,
+  `fechaNac` DATE NULL,
+  `telefono` VARCHAR(12) NULL,
+  `correo` VARCHAR(45) NULL,
+  `sobre_mi` VARCHAR(200) NULL,
+  `url_foto` VARCHAR(100) NULL,
+  PRIMARY KEY (`idpersona`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `portfolioWeb`.`tipo_empleo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `portfolioWeb`.`tipo_empleo` (
+  `idtipo_emp` INT NOT NULL,
+  `nombre_tipo` VARCHAR(45) NULL,
+  PRIMARY KEY (`idtipo_emp`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `portfolioWeb`.`experiencia_laboral`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `portfolioWeb`.`experiencia_laboral` (
+  `idexp_lab` INT NOT NULL,
+  `nombreEmpresa` VARCHAR(45) NULL,
+  `esTrabajoActual` TINYINT NULL,
+  `fechaInicio` DATE NULL,
+  `fechaFinal` DATE NULL,
+  `descripcion` VARCHAR(200) NULL,
+  `persona_idpersona` INT NOT NULL,
+  `tipo_empleo_idtipo_emp` INT NOT NULL,
+  PRIMARY KEY (`idexp_lab`, `persona_idpersona`, `tipo_empleo_idtipo_emp`),
+  INDEX `fk_experiencia_laboral_persona_idx` (`persona_idpersona` ASC) VISIBLE,
+  INDEX `fk_experiencia_laboral_tipo_empleo1_idx` (`tipo_empleo_idtipo_emp` ASC) VISIBLE,
+  CONSTRAINT `fk_experiencia_laboral_persona`
+    FOREIGN KEY (`persona_idpersona`)
+    REFERENCES `portfolioWeb`.`persona` (`idpersona`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_experiencia_laboral_tipo_empleo1`
+    FOREIGN KEY (`tipo_empleo_idtipo_emp`)
+    REFERENCES `portfolioWeb`.`tipo_empleo` (`idtipo_emp`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
